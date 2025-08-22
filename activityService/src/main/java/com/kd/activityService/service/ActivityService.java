@@ -5,20 +5,26 @@ import com.kd.activityService.dto.ActivityResponse;
 import com.kd.activityService.entity.Activity;
 import com.kd.activityService.repo.ActivityRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ActivityService {
-
-    @Autowired
     private final ActivityRepo activityRepo;
     private final UserValidationService userValidationService;
+    private final RabbitTemplate rabbitTemplate;
+
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+
+    @Value("${rabbitmq.routing.key}")
+    private String routingKey;
 
     public ActivityResponse trackActivity(ActivityRequest request) {
 
@@ -37,6 +43,14 @@ public class ActivityService {
                 .build();
 
         Activity savedActivity = activityRepo.save(activity);
+
+        //publish to rabbitmq for Ai processing
+        try{
+            rabbitTemplate.convertAndSend(exchange, routingKey, savedActivity);
+
+        }catch (Exception e){
+            log.error("Failed to send activity to RabbitMQ");
+        }
 
         return mapToResponse(savedActivity);
     }
