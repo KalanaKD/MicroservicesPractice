@@ -4,10 +4,12 @@ import com.kd.fitness_tracker.dto.RegisterRequest;
 import com.kd.fitness_tracker.dto.UserResponse;
 import com.kd.fitness_tracker.entity.User;
 import com.kd.fitness_tracker.repo.UserRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class UserService {
 
     @Autowired
@@ -61,6 +63,7 @@ public class UserService {
     }
 
     public Boolean existByUserId(String userId) {
+        log.info("Calling User Validation API for userId: {}", userId);
         return userRepo.existsById(userId);
     }
 }
