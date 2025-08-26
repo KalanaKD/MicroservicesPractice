@@ -1,9 +1,10 @@
-package com.kd.fitness_tracker.dto;
+package com.kd.apigateway.user;
 
 import com.kd.fitness_tracker.entity.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
