@@ -33,7 +33,16 @@ public class UserService {
     public UserResponse register(RegisterRequest request) {
 
         if( userRepo.existsByEmail(request.getEmail())){
-            throw new RuntimeException("Email already in use");
+            User existingUser = userRepo.findByEmail(request.getEmail());
+            UserResponse userResponse = new UserResponse();
+            userResponse.setUserId(existingUser.getUserId());
+            userResponse.setKeyCloakId(existingUser.getKeyCloakId());
+            userResponse.setEmail(existingUser.getEmail());
+            userResponse.setPassword(existingUser.getPassword());
+            userResponse.setFirstName(existingUser.getFirstName());
+            userResponse.setLastName(existingUser.getLastName());
+            userResponse.setCreatedAt(existingUser.getCreatedAt());
+            userResponse.setUpdatedAt(existingUser.getUpdatedAt());
         }
 
         User user = new User();
@@ -45,6 +54,7 @@ public class UserService {
         User savedUser = userRepo.save(user);
         UserResponse userResponse = new UserResponse();
         userResponse.setUserId(savedUser.getUserId());
+        userResponse.setKeyCloakId(savedUser.getKeyCloakId());
         userResponse.setEmail(savedUser.getEmail());
         userResponse.setPassword(savedUser.getPassword());
         userResponse.setFirstName(savedUser.getFirstName());
@@ -62,8 +72,8 @@ public class UserService {
         return "User deleted successfully";
     }
 
-    public Boolean existByUserId(String userId) {
+    public Boolean existsByKeyCloakId(String userId) {
         log.info("Calling User Validation API for userId: {}", userId);
-        return userRepo.existsById(userId);
+        return userRepo.existsByKeyCloakId(userId);
     }
 }
