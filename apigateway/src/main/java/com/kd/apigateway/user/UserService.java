@@ -2,35 +2,53 @@ package com.kd.apigateway.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserValidationService {
+public class UserService {
 
     private final WebClient userServiceWebClient;
 
-    public boolean validateUser(String userId){
+    public Mono<Boolean> validateUser(String userId){
         log.info("Calling User Validation API for userId: {}", userId);
 
-        try{
-            return Boolean.TRUE.equals(userServiceWebClient.get()
-                    .uri("/api/v1/{userId}/validate", userId)
+            return userServiceWebClient.get()
+                    .uri("/api/users/{userId}/validate", userId)
                     .retrieve()
                     .bodyToMono(Boolean.class)
-                    .block());
-
-        }catch(WebClientResponseException e){
-            if(e.getRawStatusCode() == 404){
-                throw new RuntimeException("User not found - UserId : " + userId);
-            } else if (e.getRawStatusCode()== 400) {
-                throw new RuntimeException("Bad Request - Invalid UserId : " + userId);
-            }
-            throw new RuntimeException("Error validating user: " + e.getMessage());
-        }
+                    .onErrorResume(WebClientResponseException.class , e->
+                    {
+                        if(e.getStatusCode() == HttpStatus.NOT_FOUND){
+                            return Mono.error(new RuntimeException("User Not Found" + userId));
+                        } else if (e.getStatusCode()== HttpStatus.BAD_REQUEST) {
+                            return Mono.error(new RuntimeException("Bad Request" + userId));
+                        }
+                        return Mono.error(new RuntimeException("Internal Server Error" + userId + " messege: " +  e.getMessage()));
+                    });
     }
 
+    public Mono<UserResponse> registerUser(RegisterRequest request) {
+        log.info("Calling User Registration API for email: {}", request.getEmail());
+
+        return userServiceWebClient.post()
+                .uri("/api/users/register")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(UserResponse.class)
+                .onErrorResume(WebClientResponseException.class , e->
+                {
+                    if(e.getStatusCode() == HttpStatus.BAD_REQUEST){
+                        return Mono.error(new RuntimeException("Bad Request" + e.getMessage()));
+                    } else if (e.getStatusCode()== HttpStatus.INTERNAL_SERVER_ERROR) {
+                        return Mono.error(new RuntimeException("Internal Server Error " + e.getMessage()));
+                    }
+                    return Mono.error(new RuntimeException("Unexpected error " + e.getMessage()));
+                });
+    }
 }
