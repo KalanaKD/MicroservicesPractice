@@ -1,4 +1,4 @@
-package com.kd.fitness_tracker.dto;
+package com.kd.apigateway.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
