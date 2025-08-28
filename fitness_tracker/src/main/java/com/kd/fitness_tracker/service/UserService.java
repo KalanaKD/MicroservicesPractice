@@ -23,6 +23,7 @@ public class UserService {
         userResponse.setUserId(user.getUserId());
         userResponse.setEmail(user.getEmail());
         userResponse.setPassword(user.getPassword());
+        userResponse.setKeyCloakId(user.getKeyCloakId());
         userResponse.setFirstName(user.getFirstName());
         userResponse.setLastName(user.getLastName());
         userResponse.setCreatedAt(user.getCreatedAt());
@@ -50,6 +51,7 @@ public class UserService {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
+        user.setKeyCloakId(request.getKeyCloakId());
 
         User savedUser = userRepo.save(user);
         UserResponse userResponse = new UserResponse();
