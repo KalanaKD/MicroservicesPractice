@@ -5,6 +5,16 @@ import { useEffect, useContext, useState } from 'react';
 import { AuthContext } from 'react-oauth2-code-pkce';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from './store/authSlice';
+import Box from '@mui/material/Box';
+import ActivityForm from './components/ActivityForm';
+
+const ActivitiesPage = () => {
+    <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
+      <ActivityForm onActivitiesAdded = {()=> window.location.reload()}/>
+      <ActivityList />
+    </Box>
+}
+
 
 function App() {
   const {token , tokenData, logIn, logOut, isAuthenticated} = useContext(AuthContext);
@@ -28,10 +38,15 @@ function App() {
           logIn()
           }}>Login</Button>
         ) : (
-          <div>
-            <pre>{JSON.stringify(tokenData, null, 2)}</pre>
-            <pre>{JSON.stringify(token, null, 2)}</pre>
-          </div>
+          // <div>
+          //   <pre>{JSON.stringify(tokenData, null, 2)}</pre>
+          //   <pre>{JSON.stringify(token, null, 2)}</pre>
+          // </div>
+          <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
+            <Routes>
+              <Route path="/activities" element={<ActivitiesPage />} />
+            </Routes>
+          </Box>
         )}
       </Router>
     </>
