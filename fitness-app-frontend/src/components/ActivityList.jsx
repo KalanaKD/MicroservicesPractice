@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ActivityList() {
+const ActivityList = () => {
   return (
     <div>ActivityList</div>
   )
