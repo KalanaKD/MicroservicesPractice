@@ -7,12 +7,26 @@ import { useDispatch } from 'react-redux';
 import { setCredentials } from './store/authSlice';
 import Box from '@mui/material/Box';
 import ActivityForm from './components/ActivityForm';
+import ActivityDetails from './components/ActivityDetails';
+import ActivityList from './components/ActivityList';
+import { addActivity } from './services/api';
 
 const ActivitiesPage = () => {
+  const handleActivityAdded = async (activity) => {
+    try {
+      await addActivity(activity);
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to add activity", error);
+    }
+  };
+
+  return (
     <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
-      <ActivityForm onActivitiesAdded = {()=> window.location.reload()}/>
+      <ActivityForm onActivitiesAdded={handleActivityAdded} />
       <ActivityList />
     </Box>
+  )
 }
 
 
@@ -45,6 +59,8 @@ function App() {
           <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
             <Routes>
               <Route path="/activities" element={<ActivitiesPage />} />
+              <Route path="/activities/:id" element={<ActivityDetails />} />
+              <Route path="/" element={token ? <Navigate to="/activities" replace/>: <div>Welcome! Please Login...</div>} />
             </Routes>
           </Box>
         )}
