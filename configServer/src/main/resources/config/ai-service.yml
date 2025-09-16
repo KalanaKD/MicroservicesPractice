@@ -1,19 +1,32 @@
-server.port:8082
+server:
+  port: 8082
 
-eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka/
-eureka.instance.hostname=localhost
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/FitnessRecommendations
+      database: recommendations
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  gemini:
+    api:
+      url: ${GEMINI_API_URL}
+      key: ${GEMINI_API_KEY}
 
-spring.data.mongodb.uri=mongodb://localhost:27017/FitnessRecommendations
-spring.data.mongodb.database=recommendations
-eureka.instance.prefer-ip-address=true
+rabbitmq:
+  exchange:
+    name: fitness.exchange
+  routing:
+    key: activity.tracking
+  queue: activity.queue
 
-spring.rabbitmq.host=localhost
-spring.rabbitmq.port=5672
-spring.rabbitmq.username=guest
-spring.rabbitmq.password=guest
-rabbitmq.exchange.name=fitness.exchange
-rabbitmq.routing.key=activity.tracking
-rabbitmq.queue=activity.queue
-
-spring.gemini.api.url=${GEMINI_API_URL}
-spring.gemini.api.key=${GEMINI_API_KEY}
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
