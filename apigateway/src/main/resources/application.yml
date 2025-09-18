@@ -7,7 +7,7 @@ spring:
     import: optional:configserver:http://localhost:8888
   security:
     oauth2:
-      resourceserver:
+      resource server:
         jwt:
           jwk-set-uri: http://localhost:8181/realms/fitnes_OAuth2/protocol/openid-connect/certs
   autoconfigure:
