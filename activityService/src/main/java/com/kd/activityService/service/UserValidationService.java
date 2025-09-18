@@ -17,20 +17,24 @@ public class UserValidationService {
         log.info("Calling User Validation API for userId: {}", userId);
 
         try{
-            return Boolean.TRUE.equals(userServiceWebClient.get()
+            Boolean exists = userServiceWebClient.get()
                     .uri("/api/users/{userId}/validate", userId)
                     .retrieve()
                     .bodyToMono(Boolean.class)
-                    .block());
+                    .block();
+
+            return Boolean.TRUE.equals(exists);
 
         }catch(WebClientResponseException e){
             if(e.getRawStatusCode() == 404){
-                throw new RuntimeException("User not found - UserId : " + userId);
+                // user notfound -> return false
+                return false;
             } else if (e.getRawStatusCode()== 400) {
                 throw new RuntimeException("Bad Request - Invalid UserId : " + userId);
             }
             throw new RuntimeException("Error validating user: " + e.getMessage());
         }
     }
+
 
 }
