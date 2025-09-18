@@ -1,6 +1,5 @@
 package com.kd.activityService.repo;
 
-import com.kd.activityService.dto.ActivityRequest;
 import com.kd.activityService.entity.Activity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
