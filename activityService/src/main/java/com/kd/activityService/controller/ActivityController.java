@@ -10,16 +10,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/activities/")
+@RequestMapping("/api/activities")
 public class ActivityController {
 
     @Autowired
     private ActivityService activityService;
 
-    @PostMapping("/create")
+    // POST /api/activities-> create activity (frontend calls api.post('/activities', ...))
+    @PostMapping
     public ResponseEntity<ActivityResponse> trackActivity(
             @RequestBody ActivityRequest request,
-            @RequestHeader("X-User-ID") String userId
+            @RequestHeader(value = "X-User-ID", required = false) String userId
     ){
         if (userId != null) {
             request.setUserId(userId);
@@ -27,14 +28,15 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.trackActivity(request));
     }
 
-    @GetMapping("/get-activity")
-    public ResponseEntity<List<ActivityResponse>> getActivities(@RequestHeader("X-User-ID") String userId){
+    // GET /api/activities-> list
+    @GetMapping
+    public ResponseEntity<List<ActivityResponse>> getActivities(@RequestHeader(value = "X-User-ID", required = false) String userId){
         return ResponseEntity.ok(activityService.getActivities(userId));
     }
 
-    @GetMapping("/get-activity/{activityId}")
+    // GET /api/activities/{activityId}
+    @GetMapping("/{activityId}")
     public ResponseEntity<ActivityResponse> getActivity(@PathVariable("activityId") String activityId){
         return ResponseEntity.ok(activityService.getActivitesById(activityId));
     }
-
 }
