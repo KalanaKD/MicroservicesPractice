@@ -44,6 +44,7 @@ public class UserService {
             userResponse.setLastName(existingUser.getLastName());
             userResponse.setCreatedAt(existingUser.getCreatedAt());
             userResponse.setUpdatedAt(existingUser.getUpdatedAt());
+            return  userResponse;
         }
 
         User user = new User();
