@@ -18,20 +18,21 @@ public class UserService {
     public Mono<Boolean> validateUser(String userId){
         log.info("Calling User Validation API for userId: {}", userId);
 
-            return userServiceWebClient.get()
-                    .uri("/api/users/{userId}/validate", userId)
-                    .retrieve()
-                    .bodyToMono(Boolean.class)
-                    .onErrorResume(WebClientResponseException.class , e->
-                    {
-                        if(e.getStatusCode() == HttpStatus.NOT_FOUND){
-                            return Mono.error(new RuntimeException("User Not Found" + userId));
-                        } else if (e.getStatusCode()== HttpStatus.BAD_REQUEST) {
-                            return Mono.error(new RuntimeException("Bad Request" + userId));
-                        }
-                        return Mono.error(new RuntimeException("Internal Server Error" + userId + " messege: " +  e.getMessage()));
-                    });
+        return userServiceWebClient.get()
+                .uri("/api/users/{userId}/validate", userId)
+                .retrieve()
+                .bodyToMono(Boolean.class)
+                .onErrorResume(WebClientResponseException.class , e-> {
+                    if(e.getStatusCode() == HttpStatus.NOT_FOUND){
+                        // user notfound -> return false (allow registration)
+                        return Mono.just(Boolean.FALSE);
+                    } else if (e.getStatusCode()== HttpStatus.BAD_REQUEST) {
+                        return Mono.error(new RuntimeException("Bad Request " + userId));
+                    }
+                    return Mono.error(new RuntimeException("Internal Server Error " + userId + " message: " +  e.getMessage()));
+                });
     }
+
 
     public Mono<UserResponse> registerUser(RegisterRequest request) {
         log.info("Calling User Registration API for email: {}", request.getEmail());
