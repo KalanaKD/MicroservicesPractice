@@ -24,10 +24,11 @@ const ActivityList = () => {
   }, []);
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} className="grid-gap">
       {activities.map((activity) => (
         <Grid xs={12} sm={6} md={4} key={activity.id}>
           <Card
+            className="activity-card"
             sx={{ cursor: 'pointer' }}
             onClick={() => navigate(`/activities/${activity.id}`)}
           >
