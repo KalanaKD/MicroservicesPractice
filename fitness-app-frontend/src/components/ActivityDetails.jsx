@@ -28,9 +28,9 @@ const ActivityDetails = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
+    <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }} className="surface p-4">
       {/* Activity Card */}
-      <Card sx={{ mb: 2 }}>
+      <Card sx={{ mb: 2 }} className="activity-card">
         <CardContent>
           <Typography variant="h5" gutterBottom>
             Activity Details
@@ -46,7 +46,7 @@ const ActivityDetails = () => {
 
       {/* Recommendations Card */}
       {activity.recommendations && (
-        <Card>
+        <Card className="activity-card">
           <CardContent>
             <Typography variant="h5" gutterBottom>
               AI Recommendations
