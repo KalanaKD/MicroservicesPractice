@@ -37,6 +37,6 @@ public class ActivityController {
     // GET /api/activities/{activityId}
     @GetMapping("/{activityId}")
     public ResponseEntity<ActivityResponse> getActivity(@PathVariable("activityId") String activityId){
-        return ResponseEntity.ok(activityService.getActivitesById(activityId));
+        return ResponseEntity.ok(activityService.getActivitiesById(activityId));
     }
 }
