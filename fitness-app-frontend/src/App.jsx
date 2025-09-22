@@ -22,7 +22,7 @@ const ActivitiesPage = () => {
   };
 
   return (
-    <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
+    <Box component="section" sx={{ p: 2, border: '1px dashed grey' }} className="container">
       <ActivityForm onActivitiesAdded={handleActivityAdded} />
       <ActivityList />
     </Box>
@@ -45,26 +45,28 @@ function App() {
 
   return (
     <>
-      <Router>
-        {!token ? (
-          <Button variant="contained" color="#dc004e"
-        onClick={()=>{
-          logIn()
-          }}>Login</Button>
-        ) : (
-          // <div>
-          //   <pre>{JSON.stringify(tokenData, null, 2)}</pre>
-          //   <pre>{JSON.stringify(token, null, 2)}</pre>
-          // </div>
-          <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}>
-            <Routes>
-              <Route path="/activities" element={<ActivitiesPage />} />
-              <Route path="/activities/:id" element={<ActivityDetails />} />
-              <Route path="/" element={token ? <Navigate to="/activities" replace/>: <div>Welcome! Please Login...</div>} />
-            </Routes>
-          </Box>
-        )}
-      </Router>
+      <div className="app-shell">
+        <Router>
+          {!token ? (
+            <Button variant="contained" color="#dc004e" className="primary-btn"
+          onClick={()=>{
+            logIn()
+            }}>Login</Button>
+          ) : (
+            // <div>
+            //   <pre>{JSON.stringify(tokenData, null, 2)}</pre>
+            //   <pre>{JSON.stringify(token, null, 2)}</pre>
+            // </div>
+            <Box component="section" sx={{ p: 2, border: '1px dashed grey' }} className="container surface p-4">
+              <Routes>
+                <Route path="/activities" element={<ActivitiesPage />} />
+                <Route path="/activities/:id" element={<ActivityDetails />} />
+                <Route path="/" element={token ? <Navigate to="/activities" replace/>: <div>Welcome! Please Login...</div>} />
+              </Routes>
+            </Box>
+          )}
+        </Router>
+      </div>
     </>
   );
 }
