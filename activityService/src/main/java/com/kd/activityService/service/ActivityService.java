@@ -76,7 +76,7 @@ public class ActivityService {
                 .collect(Collectors.toList());
     }
 
-    public ActivityResponse getActivitesById(String activityId) {
+    public ActivityResponse getActivitiesById(String activityId) {
         return activityRepo.findByActivityId(activityId).map(this::mapToResponse)
                 .orElseThrow(()->new RuntimeException("Activity not found with id: "+activityId));
     }
