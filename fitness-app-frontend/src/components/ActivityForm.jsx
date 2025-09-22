@@ -31,7 +31,7 @@ const ActivityForm = ({ onActivityAdded }) => {
   }
 
   return (
-      <Box component="form" onSubmit={handleSubmit} sx={{ mb:4 }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mb:4 }} className="surface p-4">
         <FormControl fullWidth sx={{mb:2}}>
           <InputLabel>Activity Type</InputLabel>
           <Select value={activity.type}
@@ -55,7 +55,7 @@ const ActivityForm = ({ onActivityAdded }) => {
                     value={activity.caloriesBurned}
                     onChange={(e)=>{setActivity({...activity, caloriesBurned: e.target.value})}}/>
 
-        <Button type="submit" variant="contained">Add Activity</Button>
+        <Button type="submit" variant="contained" className="primary-btn">Add Activity</Button>
       </Box>
   )
 }
