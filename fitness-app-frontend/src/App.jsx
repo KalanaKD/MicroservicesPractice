@@ -61,7 +61,9 @@ function App() {
               <Routes>
                 <Route path="/activities" element={<ActivitiesPage />} />
                 <Route path="/activities/:id" element={<ActivityDetails />} />
-                <Route path="/" element={token ? <Navigate to="/activities" replace/>: <div>Welcome! Please Login...</div>} />
+                <Route path="/" element={
+                  token ? <Navigate to="/activities" replace/>: 
+                  <div>Welcome! Please Login...</div>} />
               </Routes>
             </Box>
           )}
